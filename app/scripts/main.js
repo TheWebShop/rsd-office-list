@@ -2,9 +2,8 @@ require.config({
     paths: {
         jquery: '../bower_components/jquery/jquery',
         underscore: '../bower_components/underscore/underscore',
-        listjs: '../bower_components/listjs/src/list'
-        // PlaceholderPolyfil is included as a dependency, but not loaded here by the project
-        // I've copied it's contents into placeholderPolyfill.js so that we can run it at will
+        listjs: '../bower_components/listjs/src/list',
+        placeholder: '../bower_components/placeholder/js/placeholder'
     },
     shim: {
         'listjs': {
@@ -13,6 +12,9 @@ require.config({
         'underscore': {
             exports: '_',
             init: function() {
+                // the default underscore template tags <%= %> and <% %>
+                // are interpretted as code blocks on .aspx pages
+                // so we use {{}} and {[]} instead
                 _.templateSettings = {
                      evaluate : /\{\[([\s\S]+?)\]\}/g,
                      interpolate : /\{\{([\s\S]+?)\}\}/g
@@ -22,7 +24,7 @@ require.config({
     }
 });
 
-require(['jquery', 'underscore', 'listjs', 'placeholderPolyfill'], function($, _, List, placeholderPolyfill) {
+require(['jquery', 'underscore', 'listjs', 'placeholder'], function($, _, List, Placeholder) {
     'use strict';
 
     $.getJSON('/rsd/_vti_bin/listdata.svc/Offices?$expand=Region&$orderby=Name', function(data) {
@@ -55,7 +57,7 @@ require(['jquery', 'underscore', 'listjs', 'placeholderPolyfill'], function($, _
         });
 
         // now that the <input> is on the stage we can polyfil for IE8
-        if(!Modernizr.input.placeholder) placeholderPolyfill();
+        if(!Modernizr.input.placeholder) window.placeholder = new Placeholder();
 
         function zebraTable(container){
             $(container).find('tr').each(function(i){

@@ -7,8 +7,10 @@
     "jquery": "~1.9.1",
     "listjs": "~0.2.1",
     "underscore": "~1.5.1",
-    "json2": "latest",
-    "PlaceholderPolyfil": "latest"
+    "placeholder": "~1.0.2"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "resolutions": {
+    "jquery": "~1.9.1"
+  }
 }
